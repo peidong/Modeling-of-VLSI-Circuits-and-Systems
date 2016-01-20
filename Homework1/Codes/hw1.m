@@ -11,8 +11,6 @@
 for i=1:3
     wire{i}.width=9e-6;
     wire{i}.thickness=6e-6;
-    % change the length
-    % wire{i}.length= 9e-5;
     wire{i}.length= 9000e-6;
     wire{i}.x=(i-1)*24*1e-6;
     wire{i}.y=0;
@@ -22,8 +20,6 @@ end
 for i=1:6
     filament{i}.width=4.5e-6;
     filament{i}.thickness=6e-6;
-    % change the length
-    % filament{i}.length=9e-5;
     filament{i}.length=9000e-6;
     filament{i}.y=0;
     if mod(i,2)~=0
@@ -32,29 +28,6 @@ for i=1:6
         filament{i}.x=((i-2)/2*24+4.5)*1e-6;
     end
 end
-
-%add codes
-% for i=1:3
-%     wire{i}.width=6e-6;
-%     wire{i}.thickness=4e-6;
-%     wire{i}.length= 6000e-6;
-%     wire{i}.x=(i-1)*16*1e-6;
-%     wire{i}.y=0;
-% end
-%
-% % - discretize each wire into two filaments -
-% for i=1:6
-%     filament{i}.width=3e-6;
-%     filament{i}.thickness=4e-6;
-%     filament{i}.length=6000e-6;
-%     filament{i}.y=0;
-%     if mod(i,2)~=0
-%         filament{i}.x=(i-1)/2*16*1e-6;
-%     else
-%         filament{i}.x=((i-2)/2*16+3)*1e-6; %     end
-% end
-
-
 
 %% - Step 2: Inductance Calculation [without ground] -
 ind_filament = zeros(6,6);
@@ -79,12 +52,12 @@ end
 ind_wire = zeros(3,3);
 for i=1:3
     for j=1:3
-        if i==j
+        if (i==j)
         %TASK: use equation to calculate self-inductance of each wire
         ind_wire(i,j) = ind_filament(i,j)+ind_filament(i+1,j+1)+ind_filament(i,j+1)+ind_filament(i+1,j);%rref
         else
         %TASK: use equatoin to calculate mutual-inductance of each pair of wires
-        ind_wire(i,j) = ind_filament((i-1)*2+1,(j-1)*2+1)+ind_filament((i-1)*2+1,(j-1)*2+2)+ind_filament((i-1)*2+2,(j-1)*2+1)+ind_filament((i-1)*2+2,(j-1)*2+2)
+        ind_wire(i,j) = ind_filament((i-1)*2+1,(j-1)*2+1)+ind_filament((i-1)*2+1,(j-1)*2+2)+ind_filament((i-1)*2+2,(j-1)*2+1)+ind_filament((i-1)*2+2,(j-1)*2+2);
         end
     end
 end
@@ -100,14 +73,6 @@ K3 = ind_wire(2,3)/ind_wire(3,3);
 % TASK: use equation to calculate the capacitance between signal wire (middle one) and
 % ground
 
-% w=6e-6;
-% t=4e-6;
-% l=6000e-6;
-% s=10e-6;
-% h=10e-6;
-% e=8.85e-12;
-
-
 w=9e-6;
 t=6e-6;
 l=9000e-6;
@@ -116,10 +81,10 @@ h=15e-6;
 e=8.85e-12;
 
 % TASK: use equation to calculate the coupling capacitance
-C3=e*(1.15*(w/h)+2.8*(t/h)^0.222)*l; %single wire
-C2 = e*(0.03*(w/h)+0.83*(t/h)-0.07*(t/h)^0.222)*(s/h)^-1.34*l; %coupling capacitance
+C3  = e*(1.15*(w/h)+2.8*(t/h)^0.222)*l; %single wire
+C2  = e*(0.03*(w/h)+0.83*(t/h)-0.07*(t/h)^0.222)*(s/h)^-1.34*l; %coupling capacitance
 
-C4 = C2;
+C4  = C2;
 
 C31 = C3/2;
 C32 = C3/2;
@@ -129,8 +94,8 @@ C32 = C3/2;
 
 % TASK: use equation to calculate capcitance between edge wire and ground
 %C1 = C5;
-C1 = C2+C3;
-C5 = C1;
+C1  = C2+C3;
+C5  = C1;
 C11 = C1/2;
 C12 = C1/2;
 C51 = C5/2;
