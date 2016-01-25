@@ -1,1 +1,1 @@
-# ee201c
+# Modeling of VLSI Circuits and Systems
